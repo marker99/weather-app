@@ -1,26 +1,31 @@
-import { useState } from 'react'
-import { fetchForecast, fetchWeather } from './services/weatherService';
+import React, { useState } from 'react';
+import { weatherService } from './services/weatherService';
 import WeatherCard from './components/WeatherCard';
-import { WeatherData } from './types/WeatherData';
-import { DailyForecast } from './types/ForecastData';
 import ForecastCard from './components/ForecastCard';
+import { Forecast } from './types/Forecast';
+import { Weather } from './types/Weather';
 
-function App() {
+const App: React.FC = () => {
     const [city, setCity] = useState('');
-    const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [forecast, setForecast] = useState<DailyForecast[] | null>(null);
+    const [currentWeather, setCurrentWeather] = useState<Weather | null>(null);
+    const [forecast, setForecast] = useState<Forecast[] | null>(null);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSearch = async () => {
         try {
             setError('');
-            const data = await fetchWeather(city);
-            const forecastData = await fetchForecast(city);
-            setWeather(data);
+            setLoading(true);
+            const [weatherData, forecastData] = await Promise.all([
+                weatherService.getCurrentWeather(city),
+                weatherService.getFiveDayForecast(city)
+            ]);
+            setCurrentWeather(weatherData);
             setForecast(forecastData);
-        }
-        catch (err) {
+        } catch (err) {
             setError('Error fetching weather data: ' + err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -31,7 +36,6 @@ function App() {
                 <h2 className="text-lg font-semibold text-center">Enter a city to get the current weather and 5-day forecast</h2>
             </div>
 
-            {/* Search input */}
             <div className="flex justify-center mb-4 max-w-sm mx-auto">
                 <input
                     type="text"
@@ -40,13 +44,17 @@ function App() {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                 />
-                <button className="bg-blue-500 text-white" onClick={handleSearch}>
-                    Search
+                <button
+                    className="bg-blue-500 text-white p-2 rounded-md"
+                    onClick={handleSearch}
+                    disabled={loading}
+                >
+                    {loading ? 'Searching...' : 'Search'}
                 </button>
             </div>
 
             {error && <p className="text-red-500 text-center">{error}</p>}
-            {weather && <WeatherCard {...weather} />} {/* Pass props directly */}
+            {currentWeather && <WeatherCard weather={currentWeather} city={city} />}
             {forecast && <ForecastCard forecast={forecast} />}
         </div>
     );
