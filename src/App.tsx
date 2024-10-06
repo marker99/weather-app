@@ -25,17 +25,22 @@ function App() {
     };
 
     return (
-        <div className="p-4">
-            <h1 className="text-3xl font-bold text-center mb-5">Weather App</h1>
-            <div className="flex justify-center mb-4">
+        <div className="p-4 space-y-4">
+            <div>
+                <h1 className="text-3xl font-bold text-center">Weather App</h1>
+                <h2 className="text-lg font-semibold text-center">Enter a city to get the current weather and 5-day forecast</h2>
+            </div>
+
+            {/* Search input */}
+            <div className="flex justify-center mb-4 max-w-sm mx-auto">
                 <input
                     type="text"
-                    className="border p-2 rounded-md mr-2"
+                    className="border p-2 rounded-md mr-2 grow"
                     placeholder="Enter city"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                 />
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={handleSearch}>
+                <button className="bg-blue-500 text-white" onClick={handleSearch}>
                     Search
                 </button>
             </div>
