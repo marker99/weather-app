@@ -40,7 +40,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#f77a33] to-[#f7e468] p-6">
+        <div className="min-h-screen bg-gradient-to-br from-[#F89962] to-[#f7e468] p-6">
             <div className="max-w-4xl mx-auto space-y-4">
 
                 {/* App title */}
@@ -56,7 +56,7 @@ const App: React.FC = () => {
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
                             placeholder="Enter a city name"
-                            className="flex-grow px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="flex-grow px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F89962]"
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         />
 
